@@ -3,25 +3,31 @@ package vincent.ryan.c.RNG.model;
 import java.util.Random;
 
 public class User {
-	private String Username;
+	private String username;
 	private String password;
 	private String email;
 	private int userID;
 	private String Fname;
 	private String Lname;
+	private String type;
+	private String accountType;
 	private boolean  status = false;
 	private Random rand;
+	private boolean isAdmin;
+	private final String adminType = "admin";
+	private final String userType = "user"; 
+	
 	public User(){
 		this.rand = new Random();
 		setUserID(rand.nextInt(1000));
 	}
 
 	public String getUsername() {
-		return Username;
+		return username;
 	}
 
 	public void setUsername(String username) {
-		this.Username = username;
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -73,4 +79,38 @@ public class User {
 	public boolean authenticate(String username, String password) {
 		return false;
 	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public String getAccountType(){
+		return accountType;
+	}
+	
+	public void setAccountType(String t){
+		this.accountType = t;
+	}
+	
+	public void setAccountInfo(String fn, String ln, String email){
+		this.Fname = fn;
+		this.Lname = ln;
+		this.email = email;
+	}
+	
+	public void isAdmin(boolean o) {
+		this.isAdmin = o;
+		if(o) {
+			this.accountType = adminType;
+		}
+		else {
+			this.accountType = userType;
+		}
+	}
+	
+	
 }
