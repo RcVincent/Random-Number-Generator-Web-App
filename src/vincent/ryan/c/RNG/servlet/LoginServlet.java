@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.deser.DataFormatReaders.Match;
+
 import vincent.ryan.c.RNG.model.User;
 import vincent.ryan.c.RNG.controller.*;
 
@@ -32,9 +34,10 @@ public class LoginServlet extends HttpServlet {
 		String password = null;
 		username = req.getParameter("username");
 		password = req.getParameter("password");
-		//match = new matchUsernameWithPassword();
+		
 		ArrayList<User> user = null;
-		//user = match.matchUser(username);
+		//TODO: Find a way to make this work.
+		
 		if(user.size()>0){
 			User u = user.get(0);
 			GeneratorController controller = new GeneratorController();
@@ -45,16 +48,16 @@ public class LoginServlet extends HttpServlet {
 				
 				req.getSession().setAttribute("userID", u.getUserID());
 				//If user is an owner send them to a page of their restaurants
-				//if(u.getAccountType().equals("owner")){
-				//	resp.sendRedirect(req.getContextPath() + "/OwnerPage");
-				//}
+				if(u.getAccountType().equals("admin")){
+					resp.sendRedirect(req.getContextPath() + "/AdminPage");
+				}
 				//If user is a patron send to the homepage
 				
 				resp.sendRedirect(req.getContextPath() + "/Homepage");
 				
 
 			}
-			//display error meassage for incorrect username or password
+			//display error message for incorrect username or password
 			else{
 				errorMessage = "Incorrect Username or Password";
 				req.setAttribute("errorMessage", errorMessage);
@@ -68,6 +71,7 @@ public class LoginServlet extends HttpServlet {
 			req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
 		}
 	
+		
+
 }
 }
-	
