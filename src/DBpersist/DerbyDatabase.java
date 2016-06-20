@@ -214,10 +214,25 @@ public class DerbyDatabase implements IDatabase {
 										"where user_username = ?"
 								);
 						stmt.setString(1, newUserName);
+						resSet = stmt2.executeQuery();
+						
+						
+						List<User> result = new ArrayList<User>();
+						Boolean found = false;
+						while (resSet.next()) {
+							found = true;
+							User u = new User();
+							loadUser(u, resSet, 1);
+							result.add(u);
+						}
+						if (!found) {
+							System.out.println("<" + username + "> was not in users list");
+						}
+
+						return result;
 						
 					}
 					finally {
-						//DBUtil.closeQuietly(conn);
 						DBUtil.closeQuietly(resSet);
 						DBUtil.closeQuietly(stmt);
 						DBUtil.closeQuietly(stmt2);
