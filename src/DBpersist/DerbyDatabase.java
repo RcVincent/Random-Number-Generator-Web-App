@@ -30,8 +30,11 @@ public class DerbyDatabase implements IDatabase {
 
 		private static final int MAX_ATTEMPTS = 100;
 		
+		
+		//Add users to the database. Should co-inside with being able to create
+		//new users/admins on the fly. 
 		@Override
-		public List<User> addUserToDatabse(final String name, final String pass, final String email, final String type, final String firstN, final String lastN) {
+		public List<User> addUserToDatabse(final String username, final String pass, final String email, final String type, final String firstN, final String lastN) {
 			return executeTransaction(new Transaction<List<User>>() {
 				
 				@Override
@@ -40,13 +43,14 @@ public class DerbyDatabase implements IDatabase {
 					PreparedStatement stmt2 = null;
 					ResultSet resSet = null;
 					
+				
 					try{
 						stmt = conn.prepareStatement(
 								"insert into users(user_username, user_password, user_email, user_accountType, user_Fname, user_Lname)" + 
 										" values(?,?,?,?,?,?)"  
 								);
 								
-						stmt.setString(1, name);
+						stmt.setString(1, username);
 						stmt.setString(2, pass);
 						stmt.setString(3, email);
 						stmt.setString(4, type);
@@ -58,12 +62,14 @@ public class DerbyDatabase implements IDatabase {
 										" from users " + 
 										" where user_Username = ?"
 								);
-						stmt2.setString(1, name);
+						stmt2.setString(1, username);
 						resSet = stmt2.executeQuery();
+						
+						//Return a list of all found users. If its 
+						//empty, need to create some. 
 						
 						Boolean found = false;
 						List<User> result = new ArrayList<User>();
-						
 						while(resSet.next()) {
 							found = true;
 							User u = new User();
@@ -71,9 +77,11 @@ public class DerbyDatabase implements IDatabase {
 							result.add(u);
 						}
 						
-						// check if the title was found
+
+						// check if the user was found
+						//if not, perhaps add them?
 						if (!found) {
-							System.out.println("<" + name + "> was not found in the users table");
+							System.out.println("<" + username + "> was not found in the users table");
 						}
 
 						return result;
@@ -91,6 +99,7 @@ public class DerbyDatabase implements IDatabase {
 		
 		}
 		
+		@Override
 		public List<User> DeleteUserFromDatabase(final String username, final String password){
 			return executeTransaction(new Transaction<List<User>>() {
 				public List<User> execute(Connection conn) throws SQLException {
@@ -98,6 +107,7 @@ public class DerbyDatabase implements IDatabase {
 					PreparedStatement stmt2 = null;
 					ResultSet resSet = null; 
 					
+					//Remove users from the db. For admin use only. 
 					try {
 						stmt = conn.prepareStatement(
 								"delete from users" +
@@ -115,13 +125,19 @@ public class DerbyDatabase implements IDatabase {
 						Boolean found = false;
 						List<User> result = new ArrayList<User>();
 						
+						//Return a list of all found users. If its 
+						//empty, need to create some. 
+					
 						while(resSet.next()) {
 							found = true;
 							User u = new User();
 							loadUser(u, resSet, 1);
 							result.add(u);
 						}
-					
+						
+
+						// check if the user was found
+						//if not, perhaps add them?
 						if (!found) {
 						System.out.println("<" + username + "> users list is empty");
 						}
@@ -141,16 +157,15 @@ public class DerbyDatabase implements IDatabase {
 		
 		@Override
 		public List<User> matchUsernameWithPassword(final String name) {
-			
 			return executeTransaction(new Transaction<List<User>>() {
 				@Override
 				public List<User> execute(Connection conn) throws SQLException {
 					PreparedStatement stmt = null;
 					ResultSet resultSet = null;
 
+					//Match users with their associated passwords: for admin use only.
+					//Adds a different way to search through the user DB. 
 					try {
-
-
 						stmt = conn.prepareStatement(
 								"select * from Users " +
 										" where user_username = ? "
@@ -162,15 +177,17 @@ public class DerbyDatabase implements IDatabase {
 						// for testing that a result was returned
 						Boolean found = false;
 
+						//Return a list of all found users. If its 
+						//empty, need to create some. 
 						while (resultSet.next()) {
 							found = true;
-
 							User u = new User();
 							loadUser(u, resultSet, 1);
 							result.add(u);
 						}
 
-						// check if the title was found
+						// check if the user was found
+						//if not, perhaps add them?
 						if (!found) {
 							System.out.println("<" + name + "> was not found in the Users table");
 						}
@@ -190,12 +207,13 @@ public class DerbyDatabase implements IDatabase {
 			return executeTransaction(new Transaction<List<User>>() {
 				
 				public List<User> execute(Connection conn) throws SQLException {
-					
-				
 					PreparedStatement stmt = null;
 					PreparedStatement stmt2 = null;
 					ResultSet resSet = null;
 				
+					//Allows any user or admin to change their name, provided it isn't
+					//already in use. Because we all deserve personalization. 
+					
 					try{
 						stmt = conn.prepareStatement(
 								"update Users" + 
@@ -219,12 +237,18 @@ public class DerbyDatabase implements IDatabase {
 						
 						List<User> result = new ArrayList<User>();
 						Boolean found = false;
+						
+						//Return a list of all found users. If its 
+						//empty, need to create some. 
 						while (resSet.next()) {
 							found = true;
 							User u = new User();
 							loadUser(u, resSet, 1);
 							result.add(u);
 						}
+
+						// check if the user was found
+						//if not, perhaps add them?
 						if (!found) {
 							System.out.println("<" + username + "> was not in users list");
 						}
@@ -295,7 +319,7 @@ public class DerbyDatabase implements IDatabase {
 
 			return conn;
 		}
-		//these build the collections to return to the servlets, controlles
+		//these build the collections to return to the servlets, controller
 		private void loadUser(User user, ResultSet resultSet, int index) throws SQLException {
 			user.setUserID(resultSet.getInt(index++));
 			user.setUsername(resultSet.getString(index++));
@@ -313,6 +337,10 @@ public class DerbyDatabase implements IDatabase {
 				@Override
 				public Boolean execute(Connection conn) throws SQLException {
 					PreparedStatement stmt1 = null;
+					
+					//So far only a user class is needed. 
+					//Ideas for potentially creating a table for generated values
+					//to show generation history. 
 					try {
 						stmt1 = conn.prepareStatement(
 								"create table users (" +
@@ -338,7 +366,7 @@ public class DerbyDatabase implements IDatabase {
 			});
 		}
 		
-		//loading initial data for basic website navigation
+		//loading initial data 
 		public void loadInitialData() {
 			executeTransaction(new Transaction<Boolean>() {
 				@Override
@@ -351,9 +379,7 @@ public class DerbyDatabase implements IDatabase {
 						throw new SQLException("Couldn't read initial data", e);
 					}
 
-					PreparedStatement insertRestaurants = null;
 					PreparedStatement insertUsers = null;
-					PreparedStatement insertMenus = null;
 					try {
 
 
