@@ -16,7 +16,7 @@ td.label {
 }
 
 button {
-	margin-top: 2px;
+	margin-top: 1px;
 }
 
 #pageName {
