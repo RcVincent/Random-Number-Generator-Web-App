@@ -15,7 +15,7 @@ public class ChangeUsername {
 	}
 	public void changeUsername(String name, String newName, String pswd){
 		
-		db.changeUsername(name, newName, pswd);
+		db.changeUserName(name, newName, pswd);
 	}
 }
 
