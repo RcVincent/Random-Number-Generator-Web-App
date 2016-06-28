@@ -9,6 +9,7 @@ public interface IDatabase  {
 	 List<User> matchUsernameWithPassword(String name);
 	 List<User> DeleteUserFromDatabase(String username, String password);
 	 List<User> changeUserName(final String username, final String newUserName, final String password);
+	 List<User> addUserToDatabase(String name, String pswd, String email, String type, String first, String last);
 	
 	
 }
