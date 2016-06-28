@@ -8,14 +8,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import vincent.ryan.c.RNG.controller.ChangeUsername;
+import vincent.ryan.c.RNG.controller.GeneratorController;
 import vincent.ryan.c.RNG.controller.matchUsernameWithPassword;
+import vincent.ryan.c.RNG.model.User;
 
 
 public class ChangeAccountInfoServlet {
 	private static final long serialVersionUID = 1L;
 	private matchUsernameWithPassword match = null;
 	private ChangeUsername change = null;
-	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String user = (String) req.getSession().getAttribute("username");
@@ -27,7 +29,6 @@ public class ChangeAccountInfoServlet {
 		req.getRequestDispatcher("/_view/ChangeUsername.jsp").forward(req, resp);
 	}
 
-	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
@@ -48,7 +49,7 @@ public class ChangeAccountInfoServlet {
 		user = match.matchUser(username);
 		if(user.size()>0){
 			User u = user.get(0);
-			ProjectController controller = new ProjectController();
+			GeneratorController controller = new GeneratorController();
 			
 			//if user is authenticated, call change password
 			if(controller.authenticate(u, password)){
