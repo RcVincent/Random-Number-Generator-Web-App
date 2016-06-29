@@ -419,6 +419,13 @@ public class DerbyDatabase implements IDatabase {
 			db.loadInitialData();
 			
 		}
+
+		@Override
+		public List<User> addUserToDatabase(String name, String pswd, String email, String type, String first,
+				String last) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 		
 		
 		
