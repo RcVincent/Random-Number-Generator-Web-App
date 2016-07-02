@@ -84,4 +84,22 @@ td.label {
 		<div class="error">${errorMessage}</div>
 	</c:if>
 
+
+	<br>
+		<div id="LinkContent">
+			<div id="LinkName">Your Account</div>
+			<div>
+				<form action="${pageContext.servletContext.contextPath}/your-account"
+					method="post">
+					<table>
+						<tr>
+							<td><input type="Submit" name="submit"
+								value="Click to view Account Info" /></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+
+		</div>
+
 </html>
