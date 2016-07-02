@@ -15,46 +15,57 @@
 }
 
 #LinkContent {
-
-
-
+	float: left;
+	border: 1px solid darkgreen;
+	width: 400px;
+	margin-left:12px;
+	margin-top:12px;
+	margin-bottom:12px;
 }
 
 #LinkName {
-
-
-
+	color:darkblue;
+	font-size: 150%;
+	width:300px;
+	margin-left:13px;
+	margin-bottom:20px;
 }
 
 #ContactBody {
-
+	margin-left:20px;
+	margin-top:20px;
+	margin-bottom:20px;
 
 
 }
 
 #Content {
-
+	float:left;
 }
 
 div.fixed {
-
-
-
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
 }
 
 button {
-
-
+	margin-top: 3px;
+	margin-left: 5px;
+	margin-bottom: 5px;
 }
 
 .error {
-
-
+	color: red;
 }
 
+td.label {
+	text-align: right;
+}
 
 </style>
 </head>
+
 <body>
 	<div id="fb-root"></div>
 	<script>
@@ -73,5 +84,4 @@ button {
 		<div class="error">${errorMessage}</div>
 	</c:if>
 
-</body>
 </html>
