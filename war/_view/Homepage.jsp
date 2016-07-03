@@ -83,8 +83,19 @@ td.label {
 	<c:if test="${! empty errorMessage}">
 		<div class="error">${errorMessage}</div>
 	</c:if>
-
-
+	
+	<div id="Content">
+		<div id="LinkContent">
+			<div id="LinkName">Search</div>
+			<table>
+				<tr>
+					<form action="${pageContext.servletContext.contextPath}/Homepage"
+						method="post">
+						<td class="label"></td>
+					</form>
+				</tr>
+			</table>
+		</div>
 	<br>
 		<div id="LinkContent">
 			<div id="LinkName">Your Account</div>
@@ -99,7 +110,24 @@ td.label {
 					</table>
 				</form>
 			</div>
-
-		</div>
+			</div>
+		<br>
+		<div class="fb-like" data-href="http://localhost:8081/lab03/Homepage"
+			data-width="50" data-layout="button" data-action="recommend"
+			data-show-faces="false" data-share="false"></div>
+		<br>
+		<script>
+			!function(d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/
+						.test(d.location) ? 'http' : 'https';
+				if (!d.getElementById(id)) {
+					js = d.createElement(s);
+					js.id = id;
+					js.src = p + '://platform.twitter.com/widgets.js';
+					fjs.parentNode.insertBefore(js, fjs);
+				}
+			}(document, 'script', 'twitter-wjs');
+		</script>
+	</div>
 
 </html>
