@@ -129,5 +129,9 @@ td.label {
 			}(document, 'script', 'twitter-wjs');
 		</script>
 	</div>
-
+	<div class="fixed">
+		<button>
+			<a href="/lab03/Login"><type="button">Logout </a>
+		</button>
+</body>
 </html>
