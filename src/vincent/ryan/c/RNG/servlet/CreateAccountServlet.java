@@ -7,11 +7,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import vincent.ryan.c.RNG.controller.AddUserToDatabase;
+import vincent.ryan.c.RNG.controller.DBMethodsController;
 
 public class CreateAccountServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
-	private AddUserToDatabase AddUser = null;
+
+	private DBMethodsController c = new DBMethodsController();
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 		throws ServletException, IOException {
@@ -37,10 +38,9 @@ public class CreateAccountServlet extends HttpServlet{
 		//set session username
 		req.getSession().setAttribute("username", Username);
 				
-		//Create add user instance
-		AddUser = new AddUserToDatabase();	
+		
 		//Adds the user to the database
-		AddUser.AddUser(Username, Password, email, accountType, Firstname, Lastname);
+		c.AddUser(Username, Password, email, accountType, Firstname, Lastname);
 		//Redirect to login page
 		req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
 	}

@@ -9,11 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 
 
 import vincent.ryan.c.RNG.model.User;
-import vincent.ryan.c.RNG.controller.getAccountInformation;
+import vincent.ryan.c.RNG.controller.DBMethodsController;
+import vincent.ryan.c.RNG.controller.DBMethodsController.*;
 
 public class AccountServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
-	private getAccountInformation user = null;
+	
+	private DBMethodsController c = new DBMethodsController();
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -37,8 +39,8 @@ public class AccountServlet extends HttpServlet{
 		String email = null;
 		String username = (String) req.getSession().getAttribute("username");
 		String AccountType = null;
-		user = new getAccountInformation();
-		ArrayList<User> u = user.getInfo(username);
+		
+		ArrayList<User> u = c.getInfo(username);
 		User use = u.get(0);
 		firstname = use.getFname();
 		lastname = use.getLname();

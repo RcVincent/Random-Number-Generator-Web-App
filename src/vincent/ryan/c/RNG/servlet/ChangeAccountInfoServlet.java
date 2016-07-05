@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import vincent.ryan.c.RNG.controller.ChangeUsername;
 import vincent.ryan.c.RNG.controller.GeneratorController;
-import vincent.ryan.c.RNG.controller.matchUsernameWithPassword;
+import vincent.ryan.c.RNG.controller.DBMethodsController;
 import vincent.ryan.c.RNG.model.User;
 
 
 public class ChangeAccountInfoServlet {
 	private static final long serialVersionUID = 1L;
-	private matchUsernameWithPassword match = null;
-	private ChangeUsername change = null;
+	
+	private DBMethodsController c = new DBMethodsController(); 
+	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String user = (String) req.getSession().getAttribute("username");
@@ -44,17 +44,15 @@ public class ChangeAccountInfoServlet {
 		password = req.getParameter("password");
 		
 		//Validate login credentials
-		match = new matchUsernameWithPassword();
 		ArrayList<User> user = null;
-		user = match.matchUser(username);
+		user = c.matchUser(username);
 		if(user.size()>0){
 			User u = user.get(0);
 			GeneratorController controller = new GeneratorController();
 			
 			//if user is authenticated, call change password
 			if(controller.authenticate(u, password)){
-				change = new ChangeUsername();
-				change.changeUsername(username, newUsername, password);
+				c.changeUsername(username, newUsername, password);
 				
 				//set session username to new username
 				req.getSession().setAttribute("username", newUsername);
