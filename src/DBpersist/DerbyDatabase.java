@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import DBpersist.DBUtil;
-
 import vincent.ryan.c.RNG.model.User;
 
 
@@ -34,7 +33,7 @@ public class DerbyDatabase implements IDatabase {
 		//Add users to the database. Should co-inside with being able to create
 		//new users/admins on the fly. 
 		@Override
-		public List<User> addUserToDatabse(final String username, final String pass, final String email, final String type, final String firstN, final String lastN) {
+		public List<User> addUserToDatabase(final String username, final String pass, final String email, final String type, final String firstN, final String lastN) {
 			return executeTransaction(new Transaction<List<User>>() {
 				
 				@Override
@@ -266,7 +265,45 @@ public class DerbyDatabase implements IDatabase {
 			
 		}
 		
-		
+		public List<User> getAccountInformation(final String name) {
+			
+			return executeTransaction(new Transaction<List<User>>() {
+				@Override
+				public List<User> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+					try {
+						stmt = conn.prepareStatement(
+								"select * from Users " +
+										" where user_userName = ? "
+								);
+						stmt.setString(1, name);
+						List<User> result = new ArrayList<User>();
+						resultSet = stmt.executeQuery();
+						Boolean found = false;
+						while (resultSet.next()) {
+							found = true;
+
+							User u = new User();
+							loadUser(u, resultSet, 1);
+							result.add(u);
+						}
+
+						// check if the title was found
+						if (!found) {
+							System.out.println("<" + name + "> was not found in the Users table");
+						}
+
+						return result;
+
+
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			});
+		}
 		public<ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
 			try {
 				return doExecuteTransaction(txn);
@@ -420,12 +457,8 @@ public class DerbyDatabase implements IDatabase {
 			
 		}
 
-		@Override
-		public List<User> addUserToDatabase(String name, String pswd, String email, String type, String first,
-				String last) {
-			// TODO Auto-generated method stub
-			return null;
-		}
+		
+
 		
 		
 		
