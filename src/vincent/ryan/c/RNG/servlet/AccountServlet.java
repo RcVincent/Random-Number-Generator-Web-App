@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import vincent.ryan.c.RNG.model.User;
 import vincent.ryan.c.RNG.controller.DBMethodsController;
-import vincent.ryan.c.RNG.controller.DBMethodsController.*;
+
 
 public class AccountServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;

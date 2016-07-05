@@ -36,9 +36,5 @@ public class RNGServlet {
 	req.getRequestDispatcher("/_view/RNG.jsp").forward(req, resp);
 	}
 	
-	private int getInteger(HttpServletRequest req, String name){
-		return Integer.parseInt(req.getParameter(name));
-	}
-	
 }
 
